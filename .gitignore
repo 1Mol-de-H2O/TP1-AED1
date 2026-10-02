@@ -1,4 +1,4 @@
-/bin/
+# Eclipse
 .project
 .classpath
 .settings/
@@ -7,3 +7,17 @@ bin/
 tmp/
 *.tmp
 .recommenders/
+
+# IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+*.class
+target/
+build/
+
+.DS_Store
+Thumbs.db
