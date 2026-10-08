@@ -34,7 +34,7 @@ public class Candidato {
         return copia;
     }
 
-    //inserir/atualizar grau de interesse
+    //inserir grau de interesse
     public boolean inserirGrauInteresse(int grau) {
         if(grau > 0 && grau <= 15){
             grauDesejado = grau;
@@ -44,25 +44,30 @@ public class Candidato {
     }
 
     //inserir area de interesse pelo código
-    public boolean inserirAreaInteresse(int areaInteresse) {
+    public void inserirAreaInteresse(int areaInteresse) {
         for(int i = 0; i < areasInteresse.length; i++) {
-            if(areasInteresse[i] == 0 && !jaExisteAreaInteresse(areaInteresse)) {
-                areasInteresse[i] = areaInteresse;
-                return true;
+            if(areasInteresse[i] == 0) {
+                if(!jaExisteAreaInteresse(areaInteresse)){
+                    areasInteresse[i] = areaInteresse;
+                    return;
+                } else{
+                    throw new IllegalArgumentException("Item já existe");
+                }
+            } else{
+                throw new IndexOutOfBoundsException("Vetor cheio");
             }
         }
-        return false;
     }
 
     //deletar area de interesse pelo código
-    public boolean deletarAreaInteresse(int areaInteresse) {
+    public void deletarAreaInteresse(int areaInteresse) {
         for(int i = 0; i < areasInteresse.length; i++) {
             if(areasInteresse[i] == areaInteresse) {
                 areasInteresse[i] = 0;
-                return true;
+                return;
             }
         }
-        return false;
+        throw new IllegalArgumentException("Item não existente");
     }
 
     //verificar se area de interesse já está cadastrada
