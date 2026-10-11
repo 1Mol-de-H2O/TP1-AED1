@@ -1,6 +1,6 @@
 package lista;
 
-public class LED <T> {
+public class ListaIdentificadores <T> {
 
     private Celula head;
     private Celula tail;
@@ -15,10 +15,11 @@ public class LED <T> {
         }
     }
 
-    public LED() {
+    public ListaIdentificadores(){
         head = new Celula(null);
         tail = new Celula(null);
         head.prox = tail;
+        tail.prox = null;
     }
 
     public int getSize() {
@@ -28,9 +29,9 @@ public class LED <T> {
     //adicionar no fim
     public void add(T item) {
         if (item != null) {
-            Celula aux = tail;
-            tail = new Celula(item);
-            tail.prox = aux;
+            tail.item = item;
+            tail.prox = new Celula(null);
+            tail = tail.prox;
             size++;
         }  else {
             throw new IllegalArgumentException("Item inválido");
@@ -42,7 +43,7 @@ public class LED <T> {
     public String toString() {
         StringBuilder sb = new StringBuilder("[ ");
         Celula atual = head.prox;
-        while (atual != null) {
+        while (atual != tail) {
             sb.append(atual.item);
             sb.append(" ");
             atual = atual.prox;
