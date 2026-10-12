@@ -1,34 +1,51 @@
 package classes;
 
-public class Candidato {
-    private String nome;
-    private char sexo;
-    private String estado;
-    private char sexoInteresse;
-    private int grauDesejado; //grau de interesse desejado
-    private int[] areasInteresse = new int[8];;
+import lista.ListaIdentificadores;
 
+public class Candidato {
+	private static int contId = 1;
+	
+	private int id;
+    private String nome;
+    private String estado;
+    private char sexo;
+    private char sexoInteresse;
+    private int grauDesejado;
+    
+    private ListaIdentificadores<Integer> areasInteresse;
+    private ListaIdentificadores<Integer> companheiros;
+
+    
     private Candidato(String nome, char sexo, char sexoInteresse, String estado) {
-        this.nome = nome;
+        this.id = contId++;
+    	this.nome = nome;
         this.sexo = sexo;
         this.sexoInteresse = sexoInteresse;
         this.estado = estado;
+        this.areasInteresse = new ListaIdentificadores<Integer>();
+        this.companheiros = new ListaIdentificadores<Integer>();
     }
 
-    public Candidato newInstance(String nome, char sexo, char sexoInteresse, String estado) {
-        if(nome != null && !nome.isEmpty() && estado != null && !estado.isEmpty()) {
-            return new Candidato(nome, sexo, sexoInteresse, estado);
-        }
-        return null;
+    public static Candidato newInstance(String nome, char sexo, char sexoInteresse, String estado) {
+        if (nome == null || nome.isEmpty())
+            throw new IllegalArgumentException("Nome inválido");
+        if (estado == null || !Estados.valido(estado))
+            throw new IllegalArgumentException("Estado inválido");
+        if (sexo != 'F' && sexo != 'M')
+            throw new IllegalArgumentException("Sexo inválido");
+        if (sexoInteresse != 'F' && sexoInteresse != 'M' && sexoInteresse != 'I')
+            throw new IllegalArgumentException("Sexo de interesse inválido");
+        return new Candidato(nome, sexo, sexoInteresse, estado);
     }
 
     //retorna areas de interesse
-    public int[] getAreasInteresse() {
+    public ListaIdentificadores<Integer> getAreasInteresse() {
         return copia(areasInteresse);
     }
-    private int[] copia(int[] v) {
-        int[] copia = new int[v.length];
-        for(int i = 0; i < v.length; i++){
+    
+    private ListaIdentificadores<Integer> copia(ListaIdentificadores<Integer> v) {
+    	ListaIdentificadores<Integer> copia = new ListaIdentificadores<Integer>();
+        for(int i = 0; i < v.getSize(); i++){
             copia[i] = v[i];
         }
         return copia;
