@@ -15,6 +15,8 @@ public class Candidato {
     private ListaIdentificadores<Integer> areasInteresse;
     private ListaIdentificadores<Integer> companheiros;
 
+    private static int[] PESOS = { 0, 1, 2, 1, 1, 3, 2, 2, 3 };
+
     private Candidato(String nome, char sexo, char sexoInteresse, String estado) {
         this.id = contId++;
         this.nome = nome;
@@ -39,10 +41,6 @@ public class Candidato {
     }
 
     // getters
-    public static int getContId() {
-        return contId;
-    }
-
     public int getId() {
         return id;
     }
@@ -68,11 +66,11 @@ public class Candidato {
     }
 
     public ListaIdentificadores<Integer> getAreasInteresse() {
-        return areasInteresse;
+        return areasInteresse.copia();
     }
 
     public ListaIdentificadores<Integer> getCompanheiros() {
-        return companheiros;
+        return companheiros.copia();
     }
 
     // inserir grau de interesse
@@ -106,37 +104,56 @@ public class Candidato {
     }
 
     // metódos pedidos ---
-    public void verificaPotencialCompanheiro(Candidato u) {
-
+    public boolean verificaPotencialCompanheiro(Candidato v) {
+        if (this.id == v.id)
+            return false;
+        if (!this.estado.equals(v.estado))
+            return false;
+        if (!this.aceita(v) || !v.aceita(this))
+            return false;
+        int grau = grauEmComum(v);
+        if (grau >= this.grauDesejado && grau >= v.grauDesejado)
+            return true;
+        return false;
     }
 
     public void inserePotencialCompanheiro(Candidato v) {
         this.companheiros.add(v.getId());
     }
 
-    public int numeroCompanheiros(Candidato u) {
-        return u.companheiros.getSize();
+    public int numeroCompanheiros() {
+        return companheiros.getSize();
     }
 
     public ListaIdentificadores<Integer> listaCompanheiros() {
-        return this.companheiros; // preciso de aplicar metódo de copia
+        return companheiros.copia(); // preciso de aplicar metódo de copia
     }
 
-    public boolean temInteresse(Candidato u, int id) {
-        if (u.areasInteresse.contem(id))
-            return true;
-        else
-            return false;
+    public boolean temInteresse(int area) {
+        return areasInteresse.contem(area);
+
     }
 
-    public boolean reside(Candidato u, String sigla) {
-        if (u.estado.equalsIgnoreCase(sigla))
-            return true;
-        else
-            return false;
+    public boolean reside(String sigla) {
+        return estado.equalsIgnoreCase(sigla);
     }
 
     // ---
+
+    private boolean aceita(Candidato v) {
+        if (this.sexoInteresse == 'I' || this.sexoInteresse == v.sexo)
+            return true;
+        return false;
+    }
+
+    private int grauEmComum(Candidato v) {
+        int grau = 0;
+        for (int area = 1; area <= 8; area++) {
+            if (this.areasInteresse.contem(area) && v.areasInteresse.contem(area))
+                grau += PESOS[area];
+        }
+        return grau;
+    }
 
     public void reiniciarCompanheiros() {
         this.companheiros = new ListaIdentificadores<Integer>();
