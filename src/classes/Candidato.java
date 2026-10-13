@@ -69,10 +69,6 @@ public class Candidato {
         return areasInteresse.copia();
     }
 
-    public ListaIdentificadores<Integer> getCompanheiros() {
-        return companheiros.copia();
-    }
-
     // inserir grau de interesse
     public boolean inserirGrauInteresse(int grau) {
         if (grau > 0 && grau <= 15) {
@@ -126,7 +122,7 @@ public class Candidato {
     }
 
     public ListaIdentificadores<Integer> listaCompanheiros() {
-        return companheiros.copia(); // preciso de aplicar metódo de copia
+        return companheiros.copia();
     }
 
     public boolean temInteresse(int area) {
