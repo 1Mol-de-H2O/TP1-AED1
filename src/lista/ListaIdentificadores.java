@@ -1,7 +1,5 @@
 package lista;
 
-import com.sun.org.apache.xerces.internal.parsers.NonValidatingConfiguration;
-
 public class ListaIdentificadores<T> {
 
 	private Celula head;
@@ -63,7 +61,7 @@ public class ListaIdentificadores<T> {
 	}
 
 	// add em qualquer posição
-	public void add(long i, T item) {
+	public void add(int i, T item) {
 		if (i >= 0 && i <= size && item != null) {
 				Celula atual = head.prox, ant = head;
 				int cont = 0;
@@ -81,33 +79,6 @@ public class ListaIdentificadores<T> {
 		}
 	}
 	
-/*	verifica tudo e cada caso
-	public void add(long i, T item) {
-		if (i >= 0 && i <= size && item != null) {
-			if (i == 0) {
-				addIni(item);
-			} else if (i == size) {
-				add(item);
-			} else {
-
-				Celula atual = head.prox, ant = head;
-				int cont = 0;
-
-				while (cont < i && atual != tail) {
-					ant = atual;
-					atual = atual.prox;
-					cont++;
-				}
-				ant.prox = new Celula(item);
-				ant.prox.prox = atual;
-				size++;
-			}
-		} else {
-			throw new IllegalArgumentException("Item ou posição errada");
-		}
-	}
-*/
-
 	public boolean contem(T item) {
 		Celula atual = head.prox;
 		while (atual != tail) {
