@@ -9,7 +9,7 @@ public class Estados {
 	public static boolean valido(String sigla) {
 		int cont = 0;
 		while (cont < quantidade()) {
-			if (sigla.equalsIgnoreCase(SIGLAS[cont])) {
+			if (SIGLAS[cont].equalsIgnoreCase(sigla)) {
 				return true;
 			}
 			cont++;
