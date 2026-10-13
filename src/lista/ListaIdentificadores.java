@@ -1,5 +1,7 @@
 package lista;
 
+import com.sun.org.apache.xerces.internal.parsers.NonValidatingConfiguration;
+
 public class ListaIdentificadores<T> {
 
 	private Celula head;
@@ -132,6 +134,16 @@ public class ListaIdentificadores<T> {
 			size--;
 			return atual.item;
 		}
+	}
+	
+	public ListaIdentificadores<T> copia(){
+		ListaIdentificadores<T> nova = new ListaIdentificadores<T>();
+		Celula atual = head.prox;
+		while (atual != tail) {
+			nova.add(atual.item);
+			atual = atual.prox;
+		}
+		return nova;
 	}
 
 	@Override
