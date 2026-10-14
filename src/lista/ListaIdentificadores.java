@@ -130,4 +130,24 @@ public class ListaIdentificadores<T> {
 		sb.append("]");
 		return sb.toString();
 	}
+	
+	public class Iterador {
+	    private Celula atual = head.prox;
+
+	    public boolean temProximo() {
+	        return atual != tail;
+	    }
+
+	    public T proximo() {
+	        if (atual == tail)
+	            throw new IndexOutOfBoundsException("Não há próximo elemento");
+	        T item = atual.item;
+	        atual = atual.prox;
+	        return item;
+	    }
+	}
+
+	public Iterador iterador() {
+	    return new Iterador();
+	}
 }
