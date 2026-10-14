@@ -1,0 +1,51 @@
+6
+Laura Mendes 1
+RS
+F
+F
+4
+8
+3
+2
+1
+Ana Silva 2
+RJ
+F
+I
+2
+6
+1
+Vinicius Araujo 3
+RJ
+F
+F
+4
+8
+6
+1
+7
+
+Bruno Carvalho 4
+RS
+M
+I
+3
+7
+3
+1
+Gabriel Alves 5
+MG
+F
+M
+4
+4
+5
+7
+3
+Gabriel Alves 6
+RJ
+F
+I
+2
+2
+6
