@@ -63,7 +63,7 @@ public class Controle {
 
                         String nomeLinha;
                         while ((nomeLinha = leitor.readLine()) != null) {
-                            if (nomeLinha.trim().isEmpty()) continue;
+                            if (nomeLinha.trim().isEmpty() || nomeLinha.trim().startsWith("****")) continue;
                             String estado = leitor.readLine();
                             String sexo = leitor.readLine();
                             String preferencia = leitor.readLine();
@@ -113,6 +113,8 @@ public class Controle {
             try (BufferedWriter escritor = Files.newBufferedWriter(temporario)) {
                 escritor.write(String.valueOf(totalExistente + quantidade));
                 escritor.newLine();
+                escritor.write("****");
+                escritor.newLine();
 
                 // copia os registros existentes
                 if (arquivoTemDados) {
@@ -129,6 +131,10 @@ public class Controle {
                 // acrescenta os novos candidatos com IDs após os já cadastrados
                 for (int i = 1; i <= quantidade; i++) {
                     int id = maiorId + i;
+                    if (i > 1 || totalExistente > 0) {
+                        escritor.write("****");
+                        escritor.newLine();
+                    }
                     escritor.write(nomes[random.nextInt(nomes.length)] + " " + id);
                     escritor.newLine();
                     escritor.write(estados[random.nextInt(estados.length)]);
