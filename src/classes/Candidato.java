@@ -40,7 +40,35 @@ public class Candidato {
         return new Candidato(nome, sexo, sexoInteresse, estado);
     }
 
-    // getters
+    // reinicia o contador de identificadores (usado ao recarregar a base)
+    public static void reiniciarContador() {
+        contId = 1;
+    }
+
+    public void setNome(String nome) {
+        if (nome == null || nome.isEmpty())
+            throw new IllegalArgumentException("Nome inválido");
+        this.nome = nome;
+    }
+
+    public void setEstado(String estado) {
+        if (estado == null || !Estados.valido(estado))
+            throw new IllegalArgumentException("Estado inválido");
+        this.estado = estado.toUpperCase();
+    }
+
+    public void setSexo(char sexo) {
+        if (sexo != 'F' && sexo != 'M')
+            throw new IllegalArgumentException("Sexo inválido");
+        this.sexo = sexo;
+    }
+
+    public void setSexoInteresse(char sexoInteresse) {
+        if (sexoInteresse != 'F' && sexoInteresse != 'M' && sexoInteresse != 'I')
+            throw new IllegalArgumentException("Sexo de interesse inválido");
+        this.sexoInteresse = sexoInteresse;
+    }
+
     public int getId() {
         return id;
     }
@@ -99,7 +127,6 @@ public class Candidato {
         return areasInteresse.contem(areaInteresse);
     }
 
-    // metódos pedidos ---
     public boolean verificaPotencialCompanheiro(Candidato v) {
         if (this.id == v.id)
             return false;
@@ -133,8 +160,6 @@ public class Candidato {
     public boolean reside(String sigla) {
         return estado.equalsIgnoreCase(sigla);
     }
-
-    // ---
 
     private boolean aceita(Candidato v) {
         if (this.sexoInteresse == 'I' || this.sexoInteresse == v.sexo)
