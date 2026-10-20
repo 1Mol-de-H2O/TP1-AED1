@@ -37,6 +37,7 @@ public class Agencia {
                 throw new IOException("Primeira linha inválida: " + primeira);
             }
 
+            Candidato.reiniciarContador();
             for (int i = 1; i <= n; i++) {
                 lidos.add(lerCandidato(br, i));
             }
