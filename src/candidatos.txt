@@ -1,68 +1,88 @@
-8
+10
 ****
-Laura Mendes 1
-RS
-F
-F
-4
-8
-3
-2
-1
-Ana Silva 2
-RJ
-F
-I
-2
-6
-1
-Vinicius Araujo 3
-RJ
-F
-F
-4
-8
-6
-1
-7
-
-Bruno Carvalho 4
-RS
-M
-I
-3
-7
-3
-1
-Gabriel Alves 5
+Ana Silva 1
 MG
 F
 M
-4
-4
+3
+1
+3
+5
+****
+Bruno Carvalho 2
+MG
+M
+F
+3
+1
 5
 7
-3
-Gabriel Alves 6
-RJ
+****
+Camila Ferreira 3
+MG
 F
 I
-2
-2
-6
-****
-Matheus Cardoso 7
-SC
-M
-M
+3
 2
 5
+8
+****
+Daniel Souza 4
+MG
+M
+I
+2
+5
+6
+****
+Eduarda Lima 5
+RJ
+F
+M
+3
+2
+4
 7
 ****
-Mariana Rocha 8
-ES
+Felipe Gomes 6
+RJ
 M
-M
+F
+3
 2
 7
+8
+****
+Gabriela Rocha 7
+RJ
+F
+F
+2
+1
+4
+****
+Henrique Alves 8
+SP
+M
+F
+3
+3
+4
 6
+****
+Isabela Ribeiro 9
+SP
+F
+M
+3
+3
+6
+8
+****
+Joao Santos 10
+ES
+M
+I
+2
+1
+2
