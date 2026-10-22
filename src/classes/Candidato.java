@@ -15,7 +15,7 @@ public class Candidato {
     private ListaIdentificadores<Integer> areasInteresse;
     private ListaIdentificadores<Integer> companheiros;
 
-    private static int[] PESOS = { 0, 1, 2, 1, 1, 3, 2, 2, 3 };
+    private static int[] pesos = { 0, 1, 2, 1, 1, 3, 2, 2, 3 };
 
     private Candidato(String nome, char sexo, char sexoInteresse, String estado) {
         this.id = contId++;
@@ -45,30 +45,6 @@ public class Candidato {
         contId = 1;
     }
 
-    public void setNome(String nome) {
-        if (nome == null || nome.isEmpty())
-            throw new IllegalArgumentException("Nome inválido");
-        this.nome = nome;
-    }
-
-    public void setEstado(String estado) {
-        if (estado == null || !Estados.valido(estado))
-            throw new IllegalArgumentException("Estado inválido");
-        this.estado = estado.toUpperCase();
-    }
-
-    public void setSexo(char sexo) {
-        if (sexo != 'F' && sexo != 'M')
-            throw new IllegalArgumentException("Sexo inválido");
-        this.sexo = sexo;
-    }
-
-    public void setSexoInteresse(char sexoInteresse) {
-        if (sexoInteresse != 'F' && sexoInteresse != 'M' && sexoInteresse != 'I')
-            throw new IllegalArgumentException("Sexo de interesse inválido");
-        this.sexoInteresse = sexoInteresse;
-    }
-
     public int getId() {
         return id;
     }
@@ -81,20 +57,8 @@ public class Candidato {
         return estado;
     }
 
-    public char getSexo() {
-        return sexo;
-    }
-
-    public char getSexoInteresse() {
-        return sexoInteresse;
-    }
-
     public int getGrauDesejado() {
         return grauDesejado;
-    }
-
-    public ListaIdentificadores<Integer> getAreasInteresse() {
-        return areasInteresse.copia();
     }
 
     // inserir grau de interesse
@@ -120,11 +84,6 @@ public class Candidato {
         if (areasInteresse.remove(areaInteresse) == null) {
             throw new IllegalArgumentException("Área não encontrada");
         }
-    }
-
-    // verificar se area de interesse já está cadastrada
-    public boolean jaExisteAreaInteresse(int areaInteresse) {
-        return areasInteresse.contem(areaInteresse);
     }
 
     public boolean verificaPotencialCompanheiro(Candidato v) {
@@ -171,7 +130,7 @@ public class Candidato {
         int grau = 0;
         for (int area = 1; area <= 8; area++) {
             if (this.areasInteresse.contem(area) && v.areasInteresse.contem(area))
-                grau += PESOS[area];
+                grau += pesos[area];
         }
         return grau;
     }

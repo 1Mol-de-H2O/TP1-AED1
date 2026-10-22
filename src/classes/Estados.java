@@ -2,14 +2,14 @@ package classes;
 
 public class Estados {
 
-	private static String[] SIGLAS = {
+	private static String[] siglas = {
 			"PR", "SC", "RS", "MG", "ES", "RJ", "SP"
 	};
 	
 	public static boolean valido(String sigla) {
 		int cont = 0;
 		while (cont < quantidade()) {
-			if (SIGLAS[cont].equalsIgnoreCase(sigla)) {
+			if (siglas[cont].equalsIgnoreCase(sigla)) {
 				return true;
 			}
 			cont++;
@@ -18,10 +18,10 @@ public class Estados {
 	}
 	
 	public static int quantidade() {
-		return SIGLAS.length;
+		return siglas.length;
 	}
 	
 	public static String get(int i) {
-		return SIGLAS[i];
+		return siglas[i];
 	}
 }

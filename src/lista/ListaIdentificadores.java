@@ -26,28 +26,6 @@ public class ListaIdentificadores<T> {
 		return size;
 	}
 
-	public T getIndex(int i) {
-		if (i < 0 || i >= size)
-			throw new IndexOutOfBoundsException("Valor não aceitável, olhe o escopo" + i);
-		Celula atual = head.prox;
-		for (int j = 0; j < i; j++) {
-			atual = atual.prox;
-		}
-		return atual.item;
-	}
-
-	// adiciona no inicio
-	public void addIni(T item) {
-		if (item != null) {
-			Celula nova = new Celula(item);
-			nova.prox = head.prox;
-			head.prox = nova;
-			size++;
-		} else {
-			throw new IllegalArgumentException("Item inválido");
-		}
-	}
-
 	// adicionar no fim
 	public void add(T item) {
 		if (item != null) {
