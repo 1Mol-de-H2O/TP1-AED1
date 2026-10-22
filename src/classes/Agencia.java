@@ -91,10 +91,6 @@ public class Agencia {
         return null;
     }
 
-    private String descricao(Candidato c) {
-        return c.getId() + " - " + c.getNome();
-    }
-
     private void calculaCompanheiros() {
         ListaIdentificadores<Candidato>.Iterador iteradorReinicio = candidatos.iterador();
         while (iteradorReinicio.temProximo())
@@ -112,44 +108,104 @@ public class Agencia {
         }
     }
 
+    private String cabecalho(String titulo) {
+        return "\n\t" + titulo + "\n";
+    }
+
+    private int digitos(int numero) {
+        return String.valueOf(numero).length();
+    }
+
+  
+    private String plural(int quantidade, String singular, String plural) {
+        return quantidade + " " + (quantidade == 1 ? singular : plural);
+    }
+
+    // só aceita estados do sul e sudeste
+    private String siglasAceitas() {
+        StringBuilder siglas = new StringBuilder();
+        for (int i = 0; i < Estados.quantidade(); i++) {
+            siglas.append(Estados.get(i));
+            if (i < Estados.quantidade() - 1)
+                siglas.append(", ");
+        }
+        return siglas.toString();
+    }
+
+    private String tabela(ListaIdentificadores<Candidato> lista) {
+        int larguraId = 2;
+        int larguraNome = 4;
+
+        ListaIdentificadores<Candidato>.Iterador iteradorMedida = lista.iterador();
+        while (iteradorMedida.temProximo()) {
+            Candidato c = iteradorMedida.proximo();
+            larguraId = Math.max(larguraId, digitos(c.getId()));
+            larguraNome = Math.max(larguraNome, c.getNome().length());
+        }
+
+        String formato = "  %" + larguraId + "s  %-" + larguraNome + "s  %s\n";
+        StringBuilder texto = new StringBuilder();
+        texto.append(String.format(formato, "ID", "Nome", "UF"));
+        texto.append(String.format(formato, "-".repeat(larguraId), "-".repeat(larguraNome), "--"));
+
+        ListaIdentificadores<Candidato>.Iterador iteradorLinhas = lista.iterador();
+        while (iteradorLinhas.temProximo()) {
+            Candidato c = iteradorLinhas.proximo();
+            texto.append(String.format(formato, c.getId(), c.getNome(), c.getEstado()));
+        }
+        return texto.toString();
+    }
+
     // inserir/atualizar o grau de interesse desejado
     public String defineGrau(int id, int grau) {
         Candidato u = buscaPorId(id);
         if (u == null)
-            return "Candidato inexistente.\n";
+            return "Erro: candidato com ID " + id + " não encontrado.\n";
         if (!u.inserirGrauInteresse(grau))
-            return "Grau inválido (use de 1 a 15).\n";
+            return "Erro: grau inválido (use de 1 a 15).\n";
         calculaCompanheiros();
-        return "Grau de " + u.getNome() + " atualizado para " + grau
-                + ". Potenciais companheiros recalculados.\n";
+        return "Grau de " + u.getNome() + " (ID " + u.getId() + ") atualizado para " + grau + ".\n"
+                + "Potenciais companheiros recalculados.\n";
     }
 
-    // número e nomes dos potenciais companheiros
+   // número e nomes dos potenciais companheiros
     public String companheirosDe(int id) {
         Candidato u = buscaPorId(id);
         if (u == null)
-            return "Candidato inexistente.\n";
+            return "Erro: candidato com ID " + id + " não encontrado.\n";
+
+        ListaIdentificadores<Candidato> companheiros = new ListaIdentificadores<Candidato>();
+        ListaIdentificadores<Integer>.Iterador iteradorIds = u.listaCompanheiros().iterador();
+        while (iteradorIds.temProximo()) {
+            Candidato v = buscaPorId(iteradorIds.proximo());
+            if (v != null)
+                companheiros.add(v);
+        }
 
         StringBuilder texto = new StringBuilder();
-        texto.append("Candidato: ").append(descricao(u))
-                .append(" (grau desejado: ").append(u.getGrauDesejado()).append(")\n");
-        texto.append("Número de potenciais companheiros: ").append(u.numeroCompanheiros()).append("\n");
+        texto.append(cabecalho("Potenciais companheiros"));
+        texto.append("Candidato:     ").append(u.getId()).append(" - ").append(u.getNome())
+                .append(" (").append(u.getEstado()).append(")\n");
+        texto.append("Grau desejado: ").append(u.getGrauDesejado()).append("\n");
 
-        ListaIdentificadores<Integer>.Iterador iteradorCompanheiros = u.listaCompanheiros().iterador();
-        while (iteradorCompanheiros.temProximo()) {
-            Candidato v = buscaPorId(iteradorCompanheiros.proximo());
-            if (v != null)
-                texto.append("  ").append(v.getNome()).append("\n");
+        if (companheiros.getSize() == 0) {
+            texto.append("Nenhum potencial companheiro encontrado.\n");
+            return texto.toString();
         }
+
+        texto.append("Encontrados:   ")
+                .append(plural(companheiros.getSize(), "potencial companheiro", "potenciais companheiros"))
+                .append("\n\n");
+        texto.append(tabela(companheiros));
         return texto.toString();
     }
 
     // K candidatos com mais potenciais companheiros
     public String topK(int k) {
         if (k <= 0)
-            return "K deve ser positivo.\n";
+            return "Erro: K deve ser positivo.\n";
 
-        StringBuilder texto = new StringBuilder();
+        ListaIdentificadores<Candidato> ranking = new ListaIdentificadores<Candidato>();
         ListaIdentificadores<Integer> escolhidos = new ListaIdentificadores<Integer>();
 
         for (int posicao = 1; posicao <= k; posicao++) {
@@ -165,66 +221,116 @@ public class Agencia {
             if (melhor == null)
                 break;
             escolhidos.add(melhor.getId());
-            texto.append(posicao).append(". ").append(descricao(melhor)).append(" - ")
-                    .append(melhor.numeroCompanheiros()).append(" potenciais companheiros\n");
+            ranking.add(melhor);
+        }
+
+        if (ranking.getSize() == 0)
+            return "Nenhum candidato cadastrado.\n";
+
+        int larguraPosicao = Math.max(1, digitos(ranking.getSize()));
+        int larguraId = 2;
+        int larguraNome = 4;
+        ListaIdentificadores<Candidato>.Iterador iteradorMedida = ranking.iterador();
+        while (iteradorMedida.temProximo()) {
+            Candidato c = iteradorMedida.proximo();
+            larguraId = Math.max(larguraId, digitos(c.getId()));
+            larguraNome = Math.max(larguraNome, c.getNome().length());
+        }
+
+        String formato = "  %" + larguraPosicao + "s  %" + larguraId + "s  %-" + larguraNome
+                + "s  %12s\n";
+        StringBuilder texto = new StringBuilder();
+        texto.append(cabecalho("Top " + ranking.getSize() + " - mais potenciais companheiros"));
+        texto.append(String.format(formato, "#", "ID", "Nome", "Companheiros"));
+        texto.append(String.format(formato, "-".repeat(larguraPosicao), "-".repeat(larguraId),
+                "-".repeat(larguraNome), "-".repeat(12)));
+
+        int posicao = 1;
+        ListaIdentificadores<Candidato>.Iterador iteradorLinhas = ranking.iterador();
+        while (iteradorLinhas.temProximo()) {
+            Candidato c = iteradorLinhas.proximo();
+            texto.append(String.format(formato, posicao, c.getId(), c.getNome(),
+                    c.numeroCompanheiros()));
+            posicao++;
+        }
+
+        if (ranking.getSize() < k) {
+            texto.append("\nAviso: foram pedidos ").append(k).append(", mas há apenas ")
+                    .append(plural(candidatos.getSize(), "candidato cadastrado", "candidatos cadastrados"))
+                    .append(".\n");
         }
         return texto.toString();
     }
 
     // candidatos sem nenhum companheiro
     public String semCompanheiros() {
-        StringBuilder texto = new StringBuilder();
-        int total = 0;
+        ListaIdentificadores<Candidato> encontrados = new ListaIdentificadores<Candidato>();
         ListaIdentificadores<Candidato>.Iterador iteradorCandidatos = candidatos.iterador();
         while (iteradorCandidatos.temProximo()) {
             Candidato c = iteradorCandidatos.proximo();
-            if (c.numeroCompanheiros() == 0) {
-                texto.append("  ").append(descricao(c)).append("\n");
-                total++;
-            }
+            if (c.numeroCompanheiros() == 0)
+                encontrados.add(c);
         }
-        texto.append("Total sem companheiros: ").append(total).append("\n");
+
+        StringBuilder texto = new StringBuilder();
+        texto.append(cabecalho("Candidatos sem potenciais companheiros"));
+        if (encontrados.getSize() == 0) {
+            texto.append("Todos os candidatos têm ao menos um potencial companheiro.\n");
+            return texto.toString();
+        }
+        texto.append(tabela(encontrados));
+        texto.append("\nTotal: ").append(plural(encontrados.getSize(), "candidato", "candidatos"))
+                .append("\n");
         return texto.toString();
     }
-
 
     // candidatos com interesse em uma área
     public String candidatosPorArea(int area) {
         if (area < 1 || area > 8)
-            return "Área inválida (use de 1 a 8).\n";
+            return "Erro: área inválida (use de 1 a 8).\n";
 
-        StringBuilder texto = new StringBuilder();
-        int total = 0;
+        ListaIdentificadores<Candidato> encontrados = new ListaIdentificadores<Candidato>();
         ListaIdentificadores<Candidato>.Iterador iteradorCandidatos = candidatos.iterador();
         while (iteradorCandidatos.temProximo()) {
             Candidato c = iteradorCandidatos.proximo();
-            if (c.temInteresse(area)) {
-                texto.append("  ").append(descricao(c)).append("\n");
-                total++;
-            }
+            if (c.temInteresse(area))
+                encontrados.add(c);
         }
-        texto.append("Total com interesse em ").append(NOMES_AREAS[area - 1])
-                .append(": ").append(total).append("\n");
+
+        StringBuilder texto = new StringBuilder();
+        texto.append(cabecalho("Interesse em " + NOMES_AREAS[area - 1] + " (área " + area + ")"));
+        if (encontrados.getSize() == 0) {
+            texto.append("Nenhum candidato com interesse nessa área.\n");
+            return texto.toString();
+        }
+        texto.append(tabela(encontrados));
+        texto.append("\nTotal: ").append(plural(encontrados.getSize(), "candidato", "candidatos"))
+                .append("\n");
         return texto.toString();
     }
 
     // candidatos que residem em um estado
     public String candidatosPorEstado(String sigla) {
         if (!Estados.valido(sigla))
-            return "Estado inválido (aceitos: PR, SC, RS, MG, ES, RJ, SP).\n";
+            return "Erro: estado inválido. Estados aceitos: " + siglasAceitas() + ".\n";
 
-        StringBuilder texto = new StringBuilder();
-        int total = 0;
+        ListaIdentificadores<Candidato> encontrados = new ListaIdentificadores<Candidato>();
         ListaIdentificadores<Candidato>.Iterador iteradorCandidatos = candidatos.iterador();
         while (iteradorCandidatos.temProximo()) {
             Candidato c = iteradorCandidatos.proximo();
-            if (c.reside(sigla)) {
-                texto.append("  ").append(descricao(c)).append("\n");
-                total++;
-            }
+            if (c.reside(sigla))
+                encontrados.add(c);
         }
-        texto.append("Total residentes em ").append(sigla.toUpperCase())
-                .append(": ").append(total).append("\n");
+
+        StringBuilder texto = new StringBuilder();
+        texto.append(cabecalho("Residentes em " + sigla.toUpperCase()));
+        if (encontrados.getSize() == 0) {
+            texto.append("Nenhum candidato reside nesse estado.\n");
+            return texto.toString();
+        }
+        texto.append(tabela(encontrados));
+        texto.append("\nTotal: ").append(plural(encontrados.getSize(), "candidato", "candidatos"))
+                .append("\n");
         return texto.toString();
     }
 }
