@@ -1,6 +1,6 @@
 10
 ****
-Ana Silva 1
+Ana Silva
 MG
 F
 M
@@ -9,7 +9,7 @@ M
 3
 5
 ****
-Bruno Carvalho 2
+Bruno Carvalho
 MG
 M
 F
@@ -18,7 +18,7 @@ F
 5
 7
 ****
-Camila Ferreira 3
+Camila Ferreira
 MG
 F
 I
@@ -27,7 +27,7 @@ I
 5
 8
 ****
-Daniel Souza 4
+Daniel Souza
 MG
 M
 I
@@ -35,7 +35,7 @@ I
 5
 6
 ****
-Eduarda Lima 5
+Eduarda Lima
 RJ
 F
 M
@@ -44,7 +44,7 @@ M
 4
 7
 ****
-Felipe Gomes 6
+Felipe Gomes
 RJ
 M
 F
@@ -53,7 +53,7 @@ F
 7
 8
 ****
-Gabriela Rocha 7
+Gabriela Rocha
 RJ
 F
 F
@@ -61,7 +61,7 @@ F
 1
 4
 ****
-Henrique Alves 8
+Henrique Alves
 SP
 M
 F
@@ -70,7 +70,7 @@ F
 4
 6
 ****
-Isabela Ribeiro 9
+Isabela Ribeiro
 SP
 F
 M
@@ -79,7 +79,7 @@ M
 6
 8
 ****
-Joao Santos 10
+Joao Santos
 ES
 M
 I
